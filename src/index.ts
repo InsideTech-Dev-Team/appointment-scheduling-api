@@ -2,15 +2,29 @@ import { Elysia } from "elysia";
 import { appointment } from "./routes/appointment";
 import { ValidationError } from "elysia";
 import { HTTPException } from "./utils/errors";
+import type { ErrorApiResponse } from "./utils/types";
 
 const app = new Elysia()
-  .onError(({ error }) => {
+  .onError(({ error, set }) => {
     switch (true) {
       case error instanceof HTTPException:
+        set.status = error.status;
         return {
-          status: error.status,
-          message: error.message,
-        };
+          message: "Error Occured",
+          error: {
+            name: error.name,
+            message: error.message,
+          },
+        } satisfies ErrorApiResponse;
+      case error instanceof ValidationError:
+        set.status = "Bad Request";
+        return {
+          message: "Validation Error",
+          error: {
+            name: error.name,
+            message: error.message,
+          },
+        } satisfies ErrorApiResponse;
       default:
         return {
           status: 500,
