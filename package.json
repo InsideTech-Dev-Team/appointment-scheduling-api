@@ -14,6 +14,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@prisma/client": "5.19.1",
     "elysia": "^1.1.13",
     "prisma": "^5.19.1"
   }
