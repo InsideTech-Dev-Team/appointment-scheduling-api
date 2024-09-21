@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model appointments {
+  id String @id @db.ObjectId @default(auto()) @map("_id")
+
+  name String
+  description String?
+
+  schedules schedules[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model schedules {
+  id String @id @db.ObjectId @default(auto()) @map("_id")
+
+  time String
+  appointment_id String @db.ObjectId
+
+  appointment appointments @relation(fields: [appointment_id], references: [id])
+
+  bookings bookings[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model bookings {
+  id String @id @db.ObjectId @default(auto()) @map("_id")
+
+  date String // This Is Momment JS Output So Dont Yap Because I Dont use DateTime
+  schedule_id String @db.ObjectId
+
+  schedule schedules @relation(fields: [schedule_id], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
