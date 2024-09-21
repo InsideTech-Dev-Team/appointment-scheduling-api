@@ -1,6 +1,7 @@
 import { Elysia } from "elysia";
-import { HTTPException } from "./utils/types";
 import { appointment } from "./routes/appointment";
+import { ValidationError } from "elysia";
+import { HTTPException } from "./utils/errors";
 
 const app = new Elysia()
   .onError(({ error }) => {
