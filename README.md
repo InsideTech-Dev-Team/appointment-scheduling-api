@@ -55,4 +55,4 @@ To run the API using Docker Compose, follow these steps:
    The API will be running at `http://localhost:3000`.
 
 4. **View Swagger documentation:**
-   The Swagger documentation is available at `http://localhost:3000/docs`.
+   The Swagger documentation is available at `http://localhost:3000/swagger/`.
