@@ -3,9 +3,10 @@
   "module": "./src/index.ts",
   "type": "module",
   "scripts": {
-    "elysiajs:dev": "bunx dev src/index.ts",
-    "elysiajs:build": "bunx build src/index.ts",
-    "elysiajs:start": "bunx start src/index.ts"
+    "dev": "bun --watch src/index.ts",
+    "build": "bun build src/index.ts --target bun --outdir ./dist",
+    "start": "NODE_ENV=production bun dist/index.js",
+    "test": "bun test"
   },
   "devDependencies": {
     "@types/bun": "latest"

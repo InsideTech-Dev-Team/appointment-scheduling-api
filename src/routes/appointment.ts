@@ -2,7 +2,7 @@ import { Elysia, t } from "elysia";
 import { db } from "../utils/db";
 import type { SuccessApiResponse, BaseApiResponse } from "../utils/types";
 
-export const appointment = new Elysia({ prefix: "appointment" })
+export const appointmentHandler = new Elysia({ prefix: "appointment" })
   .get("/", async () => {
     const appointments = await db.appointments.findMany();
 

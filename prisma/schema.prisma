@@ -29,6 +29,7 @@ model schedules {
   id String @id @db.ObjectId @default(auto()) @map("_id")
 
   time String
+  utc Int
   appointment_id String @db.ObjectId
 
   appointment appointments @relation(fields: [appointment_id], references: [id])
@@ -42,7 +43,7 @@ model schedules {
 model bookings {
   id String @id @db.ObjectId @default(auto()) @map("_id")
 
-  date String // This Is Momment JS Output So Dont Yap Because I Dont use DateTime
+  date String 
   schedule_id String @db.ObjectId
 
   schedule schedules @relation(fields: [schedule_id], references: [id])
