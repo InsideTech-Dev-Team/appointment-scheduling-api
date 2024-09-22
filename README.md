@@ -1,15 +1,58 @@
-# appointment-schedule-api
+# Appointment Scheduling API
 
-To install dependencies:
+This API allows you to manage appointments, schedules, and bookings.
 
-```bash
-bun install
-```
+## Getting Started
 
-To run:
+1. **Clone the repository:**
 
-```bash
-bun run index.ts
-```
+   ```bash
+   git clone git@github.com:InsideTech-Dev-Team/appointment-scheduling-api.git
+   ```
 
-This project was created using `bun init` in bun v1.1.6. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+2. **Install dependencies:**
+
+   ```bash
+   cd appointment-scheduling-api
+   bun install
+   ```
+
+3. **Create a `.env` file:**
+
+   ```bash
+   cp .env.example .env
+   ```
+
+4. **Start the development server:**
+
+   ```bash
+   bun run dev
+   ```
+
+5. **Access the API:**
+   The API will be running at `http://localhost:3000`.
+
+6. **View Swagger documentation:**
+   The Swagger documentation is available at `http://localhost:3000/swagger/`.
+
+## Docker Compose
+
+To run the API using Docker Compose, follow these steps:
+
+1. **Build the Docker image:**
+
+   ```bash
+   docker-compose build
+   ```
+
+2. **Start the containers:**
+
+   ```bash
+   docker-compose up -d
+   ```
+
+3. **Access the API:**
+   The API will be running at `http://localhost:3000`.
+
+4. **View Swagger documentation:**
+   The Swagger documentation is available at `http://localhost:3000/docs`.
