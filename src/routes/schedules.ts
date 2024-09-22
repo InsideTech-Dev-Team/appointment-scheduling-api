@@ -4,8 +4,8 @@ import type { SuccessApiResponse } from "../utils/types";
 import { timeFormatRegex } from "../utils/regex";
 import { HTTPException } from "../utils/errors";
 
-export const scheduleHandler = new Elysia({ prefix: "schedule" })
-  .get("/list/:appointmentId", async ({ params }) => {
+export const scheduleHandler = new Elysia({ prefix: "schedules" })
+  .get("/:appointmentId", async ({ params }) => {
     const schedules = await db.schedules.findMany({
       where: {
         appointment_id: params.appointmentId,
@@ -20,9 +20,9 @@ export const scheduleHandler = new Elysia({ prefix: "schedule" })
     } satisfies SuccessApiResponse;
   })
   .post(
-    "/create/:appointmentId",
+    "/:appointmentId",
     async ({ body, params }) => {
-      // Validate Time Via Regex
+      // Validate Date Time Via Regex
       const timeIsValid = timeFormatRegex.test(body.time);
       if (!timeIsValid)
         throw new HTTPException(
@@ -53,7 +53,7 @@ export const scheduleHandler = new Elysia({ prefix: "schedule" })
       }),
     }
   )
-  .get("/:scheduleId", async ({ params }) => {
+  .get("/:appointmentId/:scheduleId", async ({ params }) => {
     const schedule = await db.schedules.findUnique({
       where: {
         id: params.scheduleId,
@@ -68,10 +68,10 @@ export const scheduleHandler = new Elysia({ prefix: "schedule" })
     } satisfies SuccessApiResponse;
   })
   .put(
-    "/:scheduleId",
+    "/:appointmentId/:scheduleId",
     async ({ params, body }) => {
       // Validate Time Via Regex
-      const timeIsValid = timeFormatRegex.test(body.time);
+      const timeIsValid = timeFormatRegex.test(body.time!);
       if (!timeIsValid)
         throw new HTTPException(
           400,
@@ -95,12 +95,12 @@ export const scheduleHandler = new Elysia({ prefix: "schedule" })
     },
     {
       body: t.Object({
-        time: t.String(),
-        utc: t.Number(),
+        time: t.Optional(t.String()),
+        utc: t.Optional(t.Number()),
       }),
     }
   )
-  .delete("/:scheduleId", async ({ params }) => {
+  .delete("/:appointmentId/:scheduleId", async ({ params }) => {
     const schedule = await db.schedules.delete({
       where: {
         id: params.scheduleId,

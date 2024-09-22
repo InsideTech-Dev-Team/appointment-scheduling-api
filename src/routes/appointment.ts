@@ -1,16 +1,22 @@
 import { Elysia, t } from "elysia";
 import { db } from "../utils/db";
-import type { SuccessApiResponse, BaseApiResponse } from "../utils/types";
+import type { SuccessApiResponse, ErrorApiResponse } from "../utils/types";
 
-export const appointmentHandler = new Elysia({ prefix: "appointment" })
-  .get("/", async () => {
-    const appointments = await db.appointments.findMany();
+export const appointmentHandler = new Elysia({ prefix: "appointments" })
+  .get(
+    "/",
+    async () => {
+      const appointments = await db.appointments.findMany({
+        include: { bookings: true, schedules: true },
+      });
 
-    return {
-      message: "Successfully retrieved appointments",
-      data: appointments,
-    } satisfies SuccessApiResponse;
-  })
+      return {
+        message: "Successfully retrieved appointments",
+        data: appointments,
+      } satisfies SuccessApiResponse;
+    },
+    {}
+  )
   .get(
     "/:id",
     async ({ params }) => {
@@ -53,7 +59,10 @@ export const appointmentHandler = new Elysia({ prefix: "appointment" })
   )
   .put(
     "/:id",
-    async ({ params, body }) => {
+    async ({
+      params,
+      body,
+    }): Promise<SuccessApiResponse | ErrorApiResponse> => {
       const appointment = await db.appointments.update({
         where: { id: params.id },
         data: {
@@ -65,17 +74,16 @@ export const appointmentHandler = new Elysia({ prefix: "appointment" })
       return {
         message: "Successfully updated appointment",
         data: appointment,
-      } satisfies SuccessApiResponse;
+      };
     },
     {
       body: t.Object({
-        name: t.String(),
-        description: t.String(),
-        startTime: t.String(),
+        name: t.Optional(t.String()),
+        description: t.Optional(t.String()),
       }),
     }
   )
-  .delete("/:id", async ({ params }) => {
+  .delete("/:id", async ({ params }): Promise<SuccessApiResponse> => {
     await db.appointments.delete({
       where: {
         id: params.id,
@@ -84,5 +92,8 @@ export const appointmentHandler = new Elysia({ prefix: "appointment" })
 
     return {
       message: "Successfully Deleted",
-    } satisfies BaseApiResponse;
+      data: {
+        id: params.id,
+      },
+    };
   });

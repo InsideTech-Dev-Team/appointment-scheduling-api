@@ -1,10 +1,12 @@
-mongo-appointment-db:
-  image: mongo
-  restart: always
-  ports:
-    - "27017:27017"
-  environment:
-    MONGO_INITDB_ROOT_USERNAME: mongolocal
-    MONGO_INITDB_ROOT_PASSWORD: mongolocal
-  volumes:
-    - .dockervolumes/mongo-data:/data/db
+services:
+  postgres-appointment-db:
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgreslocal
+      POSTGRES_PASSWORD: postgreslocal
+      POSTGRES_DB: appointment_db
+    volumes:
+      - .dockervolumes/postgres-data:/var/lib/postgresql/data

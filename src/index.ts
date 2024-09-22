@@ -4,10 +4,13 @@ import { ValidationError } from "elysia";
 import { HTTPException } from "./utils/errors";
 import type { ErrorApiResponse, SuccessApiResponse } from "./utils/types";
 import { scheduleHandler } from "./routes/schedules";
+import { bookingHandler } from "./routes/booking";
+import { swagger } from "@elysiajs/swagger";
 
 const app = new Elysia()
+  .use(swagger())
   .onError(({ error, set }) => {
-    console.error("Error Caught", error);
+    console.error(error);
     switch (true) {
       case error instanceof HTTPException:
         set.status = error.status;
@@ -24,7 +27,7 @@ const app = new Elysia()
           message: "Validation Error",
           error: {
             name: error.name,
-            message: error.message,
+            message: JSON.parse(error.message),
           },
         } satisfies ErrorApiResponse;
       default:
@@ -46,7 +49,8 @@ const app = new Elysia()
     },
   } satisfies SuccessApiResponse)
   .use(appointmentHandler)
-  .use(scheduleHandler);
+  .use(scheduleHandler)
+  .use(bookingHandler);
 
 export type AppointmentScheduleApiType = typeof app;
 export default app;
